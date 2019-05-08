@@ -1,5 +1,5 @@
 import React, {Component} from 'react'
-import {View, Text,TouchableOpacity} from 'react-native'
+import {View, Text,TouchableOpacity, StyleSheet, Platform} from 'react-native'
 import {getMetricMetaInfo, timeToString, getDailyReminderValue} from '../utils/helpers'
 import UdaciSlider from './UdaciSlider'
 import UdaciSteppers from './UdaciSteppers'
@@ -9,10 +9,11 @@ import TextButton from './TextButton'
 import {submitEntry, removeEntry} from '../utils/api'
 import {newEntry} from '../actions'
 import {connect} from 'react-redux'
+import {white, purple} from '../utils/colors'
 
 function SubmitBtn ({onPress}) {
-	return (<TouchableOpacity onPress={onPress}>
-				<Text>Submit</Text>
+	return (<TouchableOpacity onPress={onPress} style={Platform.OS === 'ios' ? styles.iosSubmitBtn : styles.androidSubmitBtn}>
+				<Text style={styles.submitBtnText}>Submit</Text>
 			</TouchableOpacity>
 			)
 }
@@ -83,24 +84,25 @@ class AddEntry extends Component {
 	render() {
 		if (this.props.alreadyLogged) {
 			return (
-				<View>
-					<Ionicons name='ios-happy' size={100}/>
+				<View style={styles.center}> 
+					<Ionicons name={Platform.OS === 'ios' ? 'ios-happy' : 'md-happy'} size={100}/>
 					<Text>Today's info already logged</Text>
-					<TextButton onPress={this.reset}>Reset</TextButton>
+					<TextButton style={{padding:10}} onPress={this.reset}>Reset</TextButton>
 				</View>
 				)
 		}
 		const metaInfo = getMetricMetaInfo()
 
 		return (
-			<View>
+			<View style={styles.container}>
 				<DateHeader date={(new Date()).toLocaleDateString()}/>
 				{Object.keys(metaInfo).map(key => {
 					const {getIcon, type, ...rest} = metaInfo[key]
 					const value = this.state[key]
 
-					return (<View key={key}>
+					return (<View style={styles.row} key={key}>
 							{getIcon()}
+
 							{type === 'slider'
 							? <UdaciSlider
 								value={value}
@@ -122,7 +124,7 @@ class AddEntry extends Component {
 }
 
 function mapStateToProps(state) {
-	const key = timeToString
+	const key = timeToString()
 
 	return {
 		alreadyLogged: state[key] && typeof state[key].today == 'undefined'
@@ -130,3 +132,48 @@ function mapStateToProps(state) {
 }
 
 export default connect(mapStateToProps)(AddEntry)
+
+const styles = StyleSheet.create({
+	iosSubmitBtn: {
+		backgroundColor: purple,
+		padding:10,
+		borderRadius:7,
+		height:45,
+		marginLeft:40,
+		marginRight:40,
+	},
+	androidSubmitBtn: {
+		backgroundColor: purple,
+		padding:10,
+		borderRadius:2,
+		height:45,
+		paddingLeft:40,
+		paddingRight:40,
+		alignSelf: 'center',
+		justifyContent:'center',
+		alignItems:'center'
+	},
+	submitBtnText: {
+		color:white,
+		fontSize: 22,
+		textAlign:'center'
+	},
+	container: {
+		flex:1,
+		padding:20,
+		backgroundColor: white
+	},
+	row: {
+		flexDirection:'row',
+		flex:1,
+		alignItems:'center'
+	},
+	center:{
+		flex:1,
+		justifyContent:'center',
+		alignItems:'center',
+		marginLeft:30,
+		marginRight:30,
+	}
+})
+
