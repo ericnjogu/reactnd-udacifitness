@@ -12,13 +12,13 @@ const Tabs = createAppContainer(createBottomTabNavigator ({
 		History: {
 			screen: History,
 			navigationOptions: {
-				tabBarIcon: () => <FontAwesome name='history' size={30} color='black'/>
+				tabBarIcon: ({tintColor}) => <FontAwesome name='history' size={30} color={tintColor}/>
 			}
 		},
 		'Add Entry': {
 			screen:AddEntry,
 			navigationOptions: {
-				tabBarIcon: () => <Entypo name='add-to-list' size={30} color='black'/>
+				tabBarIcon: ({tintColor}) => <Entypo name='add-to-list' size={30} color={tintColor}/>
 			}
 		}
 	}))
