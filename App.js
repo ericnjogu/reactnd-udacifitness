@@ -1,5 +1,5 @@
 import React from 'react';
-import {View } from 'react-native';
+import {View, Platform} from 'react-native';
 import AddEntry from './components/AddEntry'
 import {createStore} from 'redux'
 import {Provider} from 'react-redux'
@@ -7,6 +7,7 @@ import reducer from './reducers'
 import History from './components/History'
 import {createBottomTabNavigator, createAppContainer} from 'react-navigation'
 import {FontAwesome, Entypo} from '@expo/vector-icons'
+import {white, purple} from './utils/colors'
 
 const Tabs = createAppContainer(createBottomTabNavigator ({
 		History: {
@@ -19,6 +20,21 @@ const Tabs = createAppContainer(createBottomTabNavigator ({
 			screen:AddEntry,
 			navigationOptions: {
 				tabBarIcon: ({tintColor}) => <Entypo name='add-to-list' size={30} color={tintColor}/>
+			}
+		}
+	},
+	{
+		tabBarOptions: {
+			activeTintColor: Platform.OS === 'ios' ? purple : white,
+			style: {
+				height:60,
+				backgroundColor: Platform.OS === 'ios' ? white : purple,
+				shadowOffset: {
+					width:0,
+					height:3
+				},
+				shadowRadius:6,
+				shadowOpacity:1
 			}
 		}
 	}))
