@@ -1,18 +1,49 @@
 import React, {Component} from 'react'
 import {View, Text, ActivityIndicator, TouchableOpacity, StyleSheet} from 'react-native'
-import {Location} from 'expo'
+import {Location, Permissions} from 'expo'
 import {Foundation} from '@expo/vector-icons'
 import {purple, white} from '../utils/colors'
+import {calculateDirection} from '../utils/helpers'
 
 export default class Live extends Component {
 	state = {
 		coords:null,
-		status: 'ok',//null,
+		status: null,
 		direction:'',
 	}
 
 	askPermission = () => {
 
+	}
+
+	setLocation = () => {
+		Location.watchPositionAsync({
+			enableHighAccuracy: true,
+			timeInterval:1,
+			distanceInterval:1
+		},({coords}) => {
+			const newDirection = calculateDirection(coords.heading)
+			const {direction} = this.state
+			this.setState(() => ({
+				coords,
+				status:'granted',
+				direction:newDirection
+			})
+		)})
+	}
+
+	componentDidMount() {
+		Permissions.getAsync(Permissions.LOCATION)
+			.then(({status}) => {
+				if (status === 'granted') {
+					return this.setLocation()
+				}
+				this.setState(() => {status})
+			})
+			.catch((error) => {
+				console.warn('Error getting location permission', error)
+				this.setState({status:'undetermined'})
+			})
 	}
 
 	render () {
@@ -26,7 +57,7 @@ export default class Live extends Component {
 							<Foundation name='alert' size={50}/>
 							<Text>Location services have been denied by the user</Text>
 						</View>
-			case 'undertermined':
+			case 'undetermined':
 				return <View style={styles.center}>
 							<Foundation name='alert' size={50}/>
 							<Text>Location services need to be enabled</Text>
