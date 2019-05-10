@@ -7,7 +7,7 @@ import {purple, white} from '../utils/colors'
 export default class Live extends Component {
 	state = {
 		coords:null,
-		status: 'undertermined',//null,
+		status: 'denied',//null,
 		direction:'',
 	}
 
@@ -22,7 +22,10 @@ export default class Live extends Component {
 			case null:
 				return <View><ActivityIndicator style={{marginTop:30}}/></View>
 			case 'denied':
-				return <View><Text>Denied</Text></View>
+				return <View style={styles.center}>
+							<Foundation name='alert' size={50}/>
+							<Text>Location services have been denied by the user</Text>
+						</View>
 			case 'undertermined':
 				return <View style={styles.center}>
 							<Foundation name='alert' size={50}/>
