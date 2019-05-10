@@ -39,7 +39,7 @@ class History extends Component {
 						<DateHeader date={formattedDate}/>
 						<Text style={styles.noDataText}>{today}</Text>
 					</View>
-				: 	<TouchableOpacity onPress={() => console.log('Pressed')}>
+				: 	<TouchableOpacity onPress={() => this.props.navigation.navigate('detail', {id: key})}>
 						<MetricCard metrics={metrics} date={formattedDate} />
 					</TouchableOpacity>
 			}
@@ -62,7 +62,7 @@ class History extends Component {
 		if (ready === false) {
 			return <AppLoading/>
 		}
-		
+
 		return (
 			<UdaciFitnessCalendar
 				items={entries}
