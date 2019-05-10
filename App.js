@@ -18,7 +18,7 @@ const Tabs = createBottomTabNavigator ({
 				tabBarIcon: ({tintColor}) => <FontAwesome name='history' size={30} color={tintColor}/>
 			}
 		},
-		'Add Entry': {
+		AddEntry: {
 			screen:AddEntry,
 			navigationOptions: {
 				tabBarIcon: ({tintColor}) => <Entypo name='add-to-list' size={30} color={tintColor}/>
