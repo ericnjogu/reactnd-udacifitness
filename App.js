@@ -22,7 +22,8 @@ const Tabs = createBottomTabNavigator ({
 		AddEntry: {
 			screen:AddEntry,
 			navigationOptions: {
-				tabBarIcon: ({tintColor}) => <Entypo name='add-to-list' size={30} color={tintColor}/>
+				tabBarIcon: ({tintColor}) => <Entypo name='add-to-list' size={30} color={tintColor}/>,
+				tabBarLabel: 'Add Entry',
 			}
 		},
 		Live: {
