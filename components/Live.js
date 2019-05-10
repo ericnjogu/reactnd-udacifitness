@@ -1,11 +1,18 @@
 import React, {Component} from 'react'
-import {View, Text, ActivityIndicator} from 'react-native'
+import {View, Text, ActivityIndicator, TouchableOpacity, StyleSheet} from 'react-native'
+import {Location} from 'expo'
+import {Foundation} from '@expo/vector-icons'
+import {purple, white} from '../utils/colors'
 
 export default class Live extends Component {
 	state = {
 		coords:null,
-		status: null,
+		status: 'undertermined',//null,
 		direction:'',
+	}
+
+	askPermission = () => {
+
 	}
 
 	render () {
@@ -17,7 +24,15 @@ export default class Live extends Component {
 			case 'denied':
 				return <View><Text>Denied</Text></View>
 			case 'undertermined':
-				return <View><Text>undertermined</Text></View>
+				return <View style={styles.center}>
+							<Foundation name='alert' size={50}/>
+							<Text>Location services need to be enabled</Text>
+							<TouchableOpacity onPress={this.askPermission} style={styles.button}>
+								<Text style={styles.buttonText}>
+									Enable Location Services
+								</Text>
+							</TouchableOpacity>
+						</View>
 			default:
 				<View>
 					<Text>Live</Text>
@@ -26,3 +41,28 @@ export default class Live extends Component {
 		}
 	}
 }
+
+const styles = StyleSheet.create({
+	container: {
+		flex:1,
+		justifyContent:'center'
+	},
+	center:{
+		flex:1,
+		justifyContent:'center',
+		alignItems:'center',
+		marginLeft:30,
+		marginRight:30,
+	},
+	buttonText: {
+		color:white,
+		fontSize:20,
+	},
+	button: {
+		padding:10,
+		backgroundColor:purple,
+		alignSelf:'center',
+		borderRadius:5,
+		margin:20
+	}
+})
