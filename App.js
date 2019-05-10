@@ -6,10 +6,11 @@ import {Provider} from 'react-redux'
 import reducer from './reducers'
 import History from './components/History'
 import {createBottomTabNavigator, createAppContainer, createStackNavigator} from 'react-navigation'
-import {FontAwesome, Entypo} from '@expo/vector-icons'
+import {FontAwesome, Entypo, Feather} from '@expo/vector-icons'
 import {white, purple} from './utils/colors'
 import {Constants} from 'expo'
 import EntryDetail from './components/EntryDetail'
+import Live from './components/Live'
 
 const Tabs = createBottomTabNavigator ({
 		History: {
@@ -23,8 +24,16 @@ const Tabs = createBottomTabNavigator ({
 			navigationOptions: {
 				tabBarIcon: ({tintColor}) => <Entypo name='add-to-list' size={30} color={tintColor}/>
 			}
+		},
+		Live: {
+			screen: Live,
+			navigationOptions: {
+				tabBarLabel: 'Live Action',
+				tabBarIcon: ({tintColor}) => <Feather name='activity' size={30} color={tintColor}/>
+			}
 		}
 	},
+
 	{
 		tabBarOptions: {
 			activeTintColor: Platform.OS === 'ios' ? purple : white,
