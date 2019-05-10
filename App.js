@@ -1,5 +1,5 @@
 import React from 'react';
-import {View, Platform} from 'react-native';
+import {View, Platform, StatusBar} from 'react-native';
 import AddEntry from './components/AddEntry'
 import {createStore} from 'redux'
 import {Provider} from 'react-redux'
@@ -8,6 +8,7 @@ import History from './components/History'
 import {createBottomTabNavigator, createAppContainer} from 'react-navigation'
 import {FontAwesome, Entypo} from '@expo/vector-icons'
 import {white, purple} from './utils/colors'
+import {Constants} from 'expo'
 
 const Tabs = createAppContainer(createBottomTabNavigator ({
 		History: {
@@ -39,13 +40,21 @@ const Tabs = createAppContainer(createBottomTabNavigator ({
 		}
 	}))
 
+function CustomStatusBar ({backgroundColor, ...props}) {
+	return (
+		<View style={{backgroundColor, height:Constants.statusBarHeight}}>
+			<StatusBar translucent backgroundColor={backgroundColor} {...props}/>
+		</View>
+		)
+}
+
 export default class App extends React.Component {
 
   render() {
-
     return (
     	<Provider store={createStore(reducer)}>
 	      <View style={{flex:1}}>
+	      	<CustomStatusBar backgroundColor={purple} barStyle='light-content'/>
 	        <Tabs/>
 	      </View>
 	    </Provider>
