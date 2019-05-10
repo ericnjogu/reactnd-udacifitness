@@ -1,5 +1,5 @@
 import React, {Component} from 'react'
-import {View, Text, ActivityIndicator, TouchableOpacity, StyleSheet} from 'react-native'
+import {View, Text, ActivityIndicator, TouchableOpacity, StyleSheet,Animated} from 'react-native'
 import {Location, Permissions} from 'expo'
 import {Foundation} from '@expo/vector-icons'
 import {purple, white} from '../utils/colors'
@@ -10,10 +10,19 @@ export default class Live extends Component {
 		coords:null,
 		status: null,
 		direction:'',
+		bounceValue: new Aminated.Value(1)
 	}
 
 	askPermission = () => {
+		Permissions.askAsync(Permissions.LOCATION)
+			.then(({status}) => {
+				if (status === 'granted') {
+					return this.setLocation()
+				}
 
+				this.setState({status})
+			})
+			.catch((error) => console.warn('error asking location permission', error))
 	}
 
 	setLocation = () => {
@@ -23,7 +32,15 @@ export default class Live extends Component {
 			distanceInterval:1
 		},({coords}) => {
 			const newDirection = calculateDirection(coords.heading)
-			const {direction} = this.state
+			const {direction, bounceValue} = this.state
+
+			if (newDirection !== direction) {
+				Animated.sequence([
+					Animated.timing(bounceValue, {duration:200, toValue:1.04}),
+					nimated.spring(bounceValue, {toValue:1, friction:4}),
+				]).start()
+			}
+
 			this.setState(() => ({
 				coords,
 				status:'granted',
@@ -71,7 +88,7 @@ export default class Live extends Component {
 				return <View style={styles.container}>
 							<View style={styles.directionContainer}>
 								<Text style={styles.header}>You are heading</Text>
-								<Text style={styles.direction}>South</Text>
+								<Animated.Text style={[styles.direction, {transform:[{scale:bounceValue}]}]}>{direction}</Animated.Text>
 							</View>
 							<View style={styles.metricContainer}>
 								<View style={styles.metric}>
@@ -79,7 +96,7 @@ export default class Live extends Component {
 										Alt
 									</Text>
 									<Text style={[styles.subHeader, {color:white}]}>
-										{1000} m
+										{Math.round(coords.altitude)} m
 									</Text>
 								</View>
 								<View style={styles.metric}>
@@ -87,7 +104,7 @@ export default class Live extends Component {
 										Velocity
 									</Text>
 									<Text style={[styles.subHeader, {color:white}]}>
-										{50} m/s
+										{coords.speed} kph
 									</Text>
 								</View>
 							</View>
