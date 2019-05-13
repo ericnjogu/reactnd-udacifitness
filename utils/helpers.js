@@ -3,13 +3,13 @@ import React from 'react'
 import {View, StyleSheet, AsyncStorage} from 'react-native'
 import {FontAwesome, MaterialIcons, MaterialCommunityIcons} from '@expo/vector-icons'
 import {white, red, orange,blue,lightPurp, pink} from './colors'
-import {Notifications, Permission} from 'expo'
+import {Notifications, Permissions} from 'expo'
 
 const NOTIFICATION_KEY = 'UdaciFitness:notifications'
 
 export function clearLocalNotification() {
   return AsyncStorage.removeItem(NOTIFICATION_KEY)
-    .then(Notifications.cancelAllScheduledNotificationAsync())
+    .then(Notifications.cancelAllScheduledNotificationsAsync())
 }
 
 
