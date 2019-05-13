@@ -11,6 +11,7 @@ import {white, purple} from './utils/colors'
 import {Constants} from 'expo'
 import EntryDetail from './components/EntryDetail'
 import Live from './components/Live'
+import {setLocalNotification} from './utils/helpers'
 
 const Tabs = createBottomTabNavigator ({
 		History: {
@@ -75,6 +76,10 @@ function CustomStatusBar ({backgroundColor, ...props}) {
 }
 
 export default class App extends React.Component {
+
+	componentDidMount() {
+		setLocalNotification()
+	}
 
   render() {
     return (
