@@ -23,7 +23,11 @@
       "**/*"
     ],
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "bundleIdentifier":"com.mugowanjogu.udacifitness"
+    },
+    "android":{
+      "package":"com.mugowanjogu.udacifitness"
     }
   }
 }
